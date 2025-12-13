@@ -6,9 +6,13 @@ on:
       - master
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -35,4 +39,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           publish_branch: gh-pages
-          cname: ''
