@@ -118,7 +118,7 @@ export default function Portfolio() {
 					<div className="mb-6">
 						<div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-r from-blue-500 to-yellow-400 p-1 mb-4 overflow-hidden">
 							<img
-								src="https://github.com/Cameron-Griego/portfolio/blob/master/public/hero.jpg?raw=true"
+								src="https://github.com/Cameron-Griego/cameron-griego.github.io/blob/master/public/hero.jpg?raw=true"
 								alt="Cameron Griego"
 								className="w-full h-full object-cover rounded-full border-4 border-gray-900"
 								style={{ minHeight: "100%", minWidth: "100%" }}
