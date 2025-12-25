@@ -93,7 +93,7 @@ export default function Portfolio() {
 			<nav className="fixed top-0 w-full z-50 backdrop-blur-md bg-gray-900/60 border-b border-gray-800/50">
 				<div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
 					<div className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-yellow-400 text-transparent bg-clip-text">
-						Cameron Griego
+						Cameron
 					</div>
 					<div className="flex gap-6">
 						{["About", "Experience", "Projects", "Contact"].map((item) => (
@@ -119,7 +119,7 @@ export default function Portfolio() {
 						<div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-r from-blue-500 to-yellow-400 p-1 mb-4 overflow-hidden">
 							<img
 								src="https://github.com/Cameron-Griego/cameron-griego.github.io/blob/master/public/hero.jpg?raw=true"
-								alt="Cameron Griego"
+								alt="Cameron"
 								className="w-full h-full object-cover rounded-full border-4 border-gray-900"
 								style={{ minHeight: "100%", minWidth: "100%" }}
 							/>
@@ -127,7 +127,7 @@ export default function Portfolio() {
 					</div>
 
 					<h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-cyan-400 to-yellow-400 text-transparent bg-clip-text leading-loose">
-						Cameron Griego
+						Cameron
 					</h1>
 					<h2 className="text-3xl font-bold mb-2 text-white">
 						{" "}
