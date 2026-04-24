@@ -1,106 +1,117 @@
-import { useState, useEffect } from "react";
-import {
-	Github,
-	Mail,
-	Briefcase,
-	GraduationCap,
-	Rocket,
-	ExternalLink,
-} from "lucide-react";
+import { Github, Mail, ExternalLink } from "lucide-react";
+
+const techColors: Record<string, string> = {
+	Rust: "border-orange-500/60 text-orange-300 bg-orange-950/40 font-semibold",
+	"C++": "border-sky-600/50 text-sky-300/80 bg-sky-950/30",
+	TypeScript: "border-blue-500/50 text-blue-300/80 bg-blue-950/30",
+	"C#": "border-purple-500/50 text-purple-300/80 bg-purple-950/30",
+	WASM: "border-violet-600/50 text-violet-300/80 bg-violet-950/30",
+	PostgreSQL: "border-cyan-600/50 text-cyan-300/80 bg-cyan-950/30",
+	AWS: "border-amber-500/50 text-amber-300/80 bg-amber-950/30",
+	React: "border-teal-500/50 text-teal-300/80 bg-teal-950/30",
+	ReScript: "border-rose-500/50 text-rose-300/80 bg-rose-950/30",
+};
+
+const tagClass = (name: string, base: string) =>
+	`${base} ${techColors[name] ?? "border-zinc-700 text-zinc-400 bg-zinc-800/40"}`;
+
+const experiences = [
+	{
+		title: "Software Engineer",
+		company: "Aero Dynamics Development",
+		period: "2025 - Present",
+		description: "Building safe, fast, and intricate embedded systems.",
+	},
+	{
+		title: "Founder & CEO",
+		company: "Infinity Simulations",
+		period: "2024 - Present",
+		description:
+			"Building tooling and simulation software for the aviation industry.",
+	},
+];
+
+const projects = [
+	{
+		title: "Infinity Ecosystem",
+		description:
+			"Comprehensive suite for creating and distributing paid flight simulation content efficiently and securely.",
+		tech: ["Rust", "C++", "WASM", "AWS", "PostgreSQL", "React"],
+		link: "https://www.infinity-simulations.com/#/about",
+	},
+	{
+		title: "Aero Dynamics T-38",
+		description:
+			"High-fidelity T-38 simulation model with realistic flight dynamics and systems.",
+		tech: ["C++", "Rust", "PostgreSQL", "WASM"],
+		link: "https://www.infinity-simulations.com/#/aircraft",
+	},
+	{
+		title: "Aero Dynamics DC-10",
+		description:
+			"Highly detailed DC-10 simulation model with accurate flight dynamics and systems.",
+		tech: ["Rust", "ReScript", "PostgreSQL", "WASM"],
+		link: "https://www.infinity-simulations.com/#/aircraft",
+	},
+	{
+		title: "TacLink",
+		description:
+			"Full fledged multiplayer combat simulation built on Infinity's custom physics and networking engine. Full integration with MSFS and X-Plane simultaneously.",
+		tech: ["Rust", "ReScript", "WASM"],
+		link: "https://www.infinity-simulations.com/",
+	},
+];
+
+const skills = [
+	"Rust",
+	"C++",
+	"TypeScript",
+	"C#",
+	"WASM",
+	"PostgreSQL",
+	"AWS",
+	"React",
+	"ReScript",
+];
 
 export default function Portfolio() {
-	const [_scrollY, setScrollY] = useState(0);
-
-	useEffect(() => {
-		const handleScroll = () => setScrollY(window.scrollY);
-		window.addEventListener("scroll", handleScroll);
-		return () => window.removeEventListener("scroll", handleScroll);
-	}, []);
-
-	const skills = [
-		{ name: "Rust", level: 95 },
-		{ name: "C++", level: 90 },
-		{ name: "Typescript", level: 85 },
-		{ name: "C#", level: 92 },
-	];
-
-	const experiences = [
-		{
-			title: "Software Engineer",
-			company: "Aero Dynamics Development",
-			period: "2025 - Present",
-			description: "Building intricate embedded systems, and WASM graphics.",
-		},
-		{
-			title: "Founder & CEO",
-			company: "Infinity Simulations",
-			period: "2025 - Present",
-			description:
-				"Building tooling and simulation software for the aviation industry.",
-		},
-		{
-			title: "Lead Frontend Engineer",
-			company: "Ouroboros Jets",
-			period: "2022 - 2025",
-			description:
-				"Developed high-performance web applications for aviation clients, optimizing user experience and performance.",
-		},
-	];
-
-	const projects = [
-		{
-			title: "Infinity Ecosystem",
-			description:
-				"Comprehensive suite for creating and distributing paid flight simulation content efficiently and securely.",
-			tech: ["Rust", "C++", "WASM", "AWS", "PostgreSQL", "React"],
-			link: "https://www.infinity-simulations.com/#/about",
-		},
-		{
-			title: "Aero Dynamics T-38 Aircraft",
-			description:
-				"High fidelity T-38 simulation model with realistic flight dynamics and systems.",
-			tech: ["C++", "Rust", "PostgreSQL", "WASM"],
-			link: "https://www.infinity-simulations.com/#/aircraft",
-		},
-		{
-			title: "Ouroboros Jets E-Series Aircraft",
-			description:
-				"Simulation of the Embraer E-Jet series with detailed systems and performance modeling.",
-			tech: ["Typescript", "C++", "Rust", "PostgreSQL", "WASM"],
-			link: "#",
-		},
-	];
-
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 text-white">
-			{/* Animated background gradient */}
-			<div className="fixed inset-0 overflow-hidden pointer-events-none">
-				<div
-					className="absolute w-96 h-96 bg-blue-700 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"
-					style={{ top: "20%", left: "10%", animationDuration: "7s" }}
-				/>
-				<div
-					className="absolute w-96 h-96 bg-cyan-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"
-					style={{ top: "40%", right: "10%", animationDuration: "9s" }}
-				/>
-				<div
-					className="absolute w-96 h-96 bg-yellow-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"
-					style={{ bottom: "20%", left: "30%", animationDuration: "11s" }}
-				/>
-			</div>
+		<div className="min-h-screen bg-[#080809] text-zinc-200 font-sans antialiased">
+			{/* Background glows */}
+			<div
+				className="fixed top-0 left-0 w-200 h-200 rounded-full pointer-events-none"
+				style={{
+					background:
+						"radial-gradient(circle, rgba(59,130,246,0.22) 0%, transparent 65%)",
+				}}
+			/>
+			<div
+				className="fixed bottom-0 right-0 w-200 h-200 rounded-full pointer-events-none"
+				style={{
+					background:
+						"radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 65%)",
+				}}
+			/>
+			<div
+				className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 rounded-full pointer-events-none"
+				style={{
+					background:
+						"radial-gradient(circle, rgba(139,92,246,0.07) 0%, transparent 70%)",
+				}}
+			/>
 
 			{/* Navigation */}
-			<nav className="fixed top-0 w-full z-50 backdrop-blur-md bg-gray-900/60 border-b border-gray-800/50">
-				<div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-					<div className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-yellow-400 text-transparent bg-clip-text">
+			<nav className="fixed top-0 w-full z-50 border-b border-zinc-800/60 bg-[#080809]/80 backdrop-blur-md">
+				<div className="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
+					<span className="text-sm font-semibold tracking-widest uppercase bg-linear-to-r from-blue-400 to-indigo-400 text-transparent bg-clip-text">
 						Cameron
-					</div>
-					<div className="flex gap-6">
-						{["About", "Experience", "Projects", "Contact"].map((item) => (
+					</span>
+					<div className="flex gap-8 text-sm text-zinc-500">
+						{["about", "experience", "projects", "contact"].map((item) => (
 							<a
 								key={item}
-								href={`#${item.toLowerCase()}`}
-								className="hover:text-cyan-400 transition-colors duration-300"
+								href={`#${item}`}
+								className="hover:text-zinc-200 transition-colors duration-200 capitalize"
 							>
 								{item}
 							</a>
@@ -109,216 +120,216 @@ export default function Portfolio() {
 				</div>
 			</nav>
 
-			{/* Hero Section */}
-			<section
-				id="hero"
-				className="min-h-screen flex items-center justify-center relative px-6"
-			>
-				<div className="max-w-4xl text-center z-10">
-					<div className="mb-6">
-						<div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-r from-blue-500 to-yellow-400 p-1 mb-4 overflow-hidden">
+			{/* Hero */}
+			<section className="min-h-screen flex items-center px-6 pt-24">
+				<div className="max-w-5xl mx-auto w-full">
+					<div className="mb-8">
+						<div className="w-20 h-20 rounded-full overflow-hidden ring-1 ring-zinc-700 mb-8">
 							<img
 								src="https://github.com/Cameron-Griego/cameron-griego.github.io/blob/master/public/hero.jpg?raw=true"
 								alt="Cameron"
-								className="w-full h-full object-cover rounded-full border-4 border-gray-900"
-								style={{ minHeight: "100%", minWidth: "100%" }}
+								className="w-full h-full object-cover"
 							/>
 						</div>
+						<p className="text-blue-500 text-sm font-medium tracking-widest uppercase mb-3">
+							Software Engineer & Pilot
+						</p>
+						<h1 className="text-5xl sm:text-7xl font-bold leading-tight mb-6">
+							<span className="bg-linear-to-r from-blue-400 to-indigo-400 text-transparent bg-clip-text">
+								Cameron
+							</span>
+						</h1>
+						<p className="text-zinc-400 text-lg max-w-xl leading-relaxed">
+							Building low-level systems and simulation software for aviation.
+							Airline Transport Pilot · CFI/CFII/MEI · E170/E175 Type Ratings.
+						</p>
 					</div>
 
-					<h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-cyan-400 to-yellow-400 text-transparent bg-clip-text leading-loose">
-						Cameron
-					</h1>
-					<h2 className="text-3xl font-bold mb-2 text-white">
-						{" "}
-						Software Engineer & Full-Time Pilot
-					</h2>
-
-					<div className="flex gap-4 justify-center mb-12">
+					<div className="flex gap-3 mt-8">
 						<a
-							href="https://github.com/tacotakedown"
-							rel="noopener noreferrer"
+							href="https://github.com/camerongr"
 							target="_blank"
-							className="p-3 rounded-full bg-gray-800/50 backdrop-blur-sm hover:bg-cyan-500/20 transition-all duration-300 hover:scale-110"
+							rel="noopener noreferrer"
+							className="flex items-center gap-2 px-4 py-2 rounded-md border border-zinc-700 text-zinc-400 text-sm hover:border-zinc-500 hover:text-zinc-200 transition-all duration-200"
 						>
-							<Github size={24} />
+							<Github size={16} />
+							GitHub
 						</a>
 						<a
 							href="mailto:portfolio.chief702@passmail.net"
-							className="p-3 rounded-full bg-gray-800/50 backdrop-blur-sm hover:bg-cyan-500/20 transition-all duration-300 hover:scale-110"
+							className="flex items-center gap-2 px-4 py-2 rounded-md border border-zinc-700 text-zinc-400 text-sm hover:border-zinc-500 hover:text-zinc-200 transition-all duration-200"
 						>
-							<Mail size={24} />
+							<Mail size={16} />
+							Email
 						</a>
 					</div>
-					<div className="flex gap-6 justify-center text-sm">
-						<div className="flex items-center gap-2">
-							<GraduationCap className="text-cyan-400" size={20} />
-							<span>BS Computer Science</span>
-						</div>
-						<div className="flex items-center gap-2">
-							<GraduationCap className="text-purple-400" size={20} />
-							<span>MS Computer Science (in progress)</span>
-						</div>
-						<div className="flex items-center gap-2">
-							<Briefcase className="text-purple-400" size={20} />
-							<span>
-								Airline Transport Pilot License, CFI/CFII/MEI, E170/E175 Type
-								Ratings
-							</span>
-						</div>
-					</div>
 				</div>
 			</section>
 
-			{/* About Section */}
-			<section id="about" className="py-20 px-6 relative">
-				<div className="max-w-6xl mx-auto">
-					<h2 className="text-4xl font-bold mb-12 text-center bg-gradient-to-r from-blue-400 to-yellow-400 text-transparent bg-clip-text">
-						About Me
-					</h2>
-					<div className="grid md:grid-cols-2 gap-8">
-						<div className="backdrop-blur-sm bg-gray-800/30 rounded-2xl p-8 border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300">
-							<h3 className="text-2xl font-bold mb-4 flex items-center gap-3">
-								<Briefcase className="text-cyan-400" />
-								Professional
-							</h3>
-							<p className="text-gray-300 leading-relaxed">
+			{/* About */}
+			<section id="about" className="py-24 px-6">
+				<div className="max-w-5xl mx-auto">
+					<p className="text-blue-500 text-xs font-medium tracking-widest uppercase mb-4">
+						About
+					</p>
+					<div className="grid md:grid-cols-2 gap-12">
+						<div>
+							<h2 className="text-2xl font-semibold text-zinc-100 mb-4">
+								Background
+							</h2>
+							<p className="text-zinc-400 leading-relaxed">
 								Full-time pilot and flight instructor holding an Airline
-								Transport Pilot License (ATPL), E170/E175 type ratings, and all
+								Transport Pilot License, E170/E175 type ratings, and all
 								instructor ratings (CFI, CFII, MEI). Holds a BS in Computer
-								Science and is currently pursuing an MS in Computer Science
-								while building advanced software for the aviation industry.
+								Science from ASU and is currently pursuing an MS while building
+								advanced software for the aviation industry. Passionate about
+								creating fast and safe software that pushes the limits of
+								aviation training using Rust and C++.
 							</p>
 						</div>
-						<div className="backdrop-blur-sm bg-gray-800/30 rounded-2xl p-8 border border-gray-700/50 hover:border-yellow-400/50 transition-all duration-300">
-							<h3 className="text-2xl font-bold mb-4 flex items-center gap-3">
-								<Rocket className="text-purple-400" />
-								Technical
-							</h3>
-							<p className="text-gray-300 leading-relaxed">
-								Experienced software engineer with a passion for aviation
-								technology. Skilled in low-level programming, simulation, and
-								building tools that empower pilots and aviation professionals.
-							</p>
-						</div>
-					</div>
-
-					{/* Skills */}
-					<div className="mt-16">
-						<h3 className="text-3xl font-bold mb-8 text-center text-yellow-400">
-							Technical Skills
-						</h3>
-						<div className="grid md:grid-cols-2 gap-6">
-							{skills.map((skill) => (
-								<div
-									key={skill.name}
-									className="backdrop-blur-sm bg-gray-800/20 rounded-xl p-6 border border-gray-700/30"
-								>
-									<div className="flex justify-between mb-3">
-										<span className="font-semibold">{skill.name}</span>
-										<span className="text-cyan-400">{skill.level}%</span>
-									</div>
-									<div className="w-full bg-gray-700/50 rounded-full h-2">
-										<div
-											className="bg-gradient-to-r from-blue-500 to-yellow-400 h-2 rounded-full transition-all duration-1000"
-											style={{ width: `${skill.level}%` }}
-										/>
-									</div>
-								</div>
-							))}
+						<div>
+							<h2 className="text-2xl font-semibold text-zinc-100 mb-4">
+								Stack
+							</h2>
+							<div className="flex flex-wrap gap-2">
+								{skills.map((s) => (
+									<span
+										key={s}
+										className={tagClass(
+											s,
+											"px-3 py-1 text-xs rounded-md border",
+										)}
+									>
+										{s}
+									</span>
+								))}
+							</div>
 						</div>
 					</div>
 				</div>
 			</section>
 
-			{/* Experience Section */}
-			<section id="experience" className="py-20 px-6 relative">
-				<div className="max-w-6xl mx-auto">
-					<h2 className="text-4xl font-bold mb-12 text-center bg-gradient-to-r from-blue-400 to-yellow-400 text-transparent bg-clip-text">
+			{/* Divider */}
+			<div className="max-w-5xl mx-auto px-6">
+				<div className="border-t border-zinc-800" />
+			</div>
+
+			{/* Experience */}
+			<section id="experience" className="py-24 px-6">
+				<div className="max-w-5xl mx-auto">
+					<p className="text-blue-500 text-xs font-medium tracking-widest uppercase mb-10">
 						Experience
-					</h2>
-					<div className="space-y-6">
-						{experiences.map((exp, index) => (
+					</p>
+					<div className="space-y-1">
+						{experiences.map((exp) => (
 							<div
-								key={index}
-								className="backdrop-blur-sm bg-gray-800/30 rounded-2xl p-8 border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300 hover:transform hover:scale-105"
+								key={exp.company}
+								className="grid md:grid-cols-[1fr_auto] gap-4 py-6 border-b border-zinc-800/60 last:border-0 group"
 							>
-								<div className="flex justify-between items-start mb-4">
-									<div>
-										<h3 className="text-2xl font-bold text-cyan-400">
-											{exp.title}
-										</h3>
-										<p className="text-xl text-gray-300">{exp.company}</p>
-									</div>
-									<span className="text-gray-400 bg-gray-700/50 px-4 py-2 rounded-full">
-										{exp.period}
-									</span>
+								<div>
+									<h3 className="text-zinc-100 font-semibold text-lg mb-1">
+										{exp.title}
+										<span className="text-blue-400/70 font-normal">
+											{" "}
+											· {exp.company}
+										</span>
+									</h3>
+									<p className="text-zinc-500 text-sm leading-relaxed">
+										{exp.description}
+									</p>
 								</div>
-								<p className="text-gray-300">{exp.description}</p>
+								<span className="text-zinc-600 text-sm whitespace-nowrap mt-1">
+									{exp.period}
+								</span>
 							</div>
 						))}
 					</div>
 				</div>
 			</section>
 
-			{/* Projects Section */}
-			<section id="projects" className="py-20 px-6 relative">
-				<div className="max-w-6xl mx-auto">
-					<h2 className="text-4xl font-bold mb-12 text-center bg-gradient-to-r from-blue-400 to-yellow-400 text-transparent bg-clip-text">
-						Featured Projects
-					</h2>
-					<div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-						{projects.map((project, index) => (
-							<div
-								key={index}
-								className="backdrop-blur-sm bg-gray-800/30 rounded-2xl p-6 border border-gray-700/50 hover:border-yellow-400/50 transition-all duration-300 hover:transform hover:scale-105 group"
+			{/* Divider */}
+			<div className="max-w-5xl mx-auto px-6">
+				<div className="border-t border-zinc-800" />
+			</div>
+
+			{/* Projects */}
+			<section id="projects" className="py-24 px-6">
+				<div className="max-w-5xl mx-auto">
+					<p className="text-blue-500 text-xs font-medium tracking-widest uppercase mb-10">
+						Projects
+					</p>
+					<div className="grid sm:grid-cols-2 gap-6">
+						{projects.map((project) => (
+							<a
+								key={project.title}
+								href={project.link}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="group block p-6 rounded-xl border border-zinc-800 bg-zinc-900/40 hover:border-blue-700/60 hover:bg-blue-950/20 transition-all duration-200"
 							>
-								<h3 className="text-xl font-bold mb-3 flex items-center justify-between">
-									{project.title}
+								<div className="flex items-start justify-between mb-3">
+									<h3 className="text-zinc-100 font-semibold">
+										{project.title}
+									</h3>
 									<ExternalLink
-										size={20}
-										className="text-gray-400 group-hover:text-cyan-400 transition-colors"
+										size={14}
+										className="text-zinc-600 group-hover:text-blue-400 transition-colors mt-0.5 shrink-0 ml-3"
 									/>
-								</h3>
-								<p className="text-gray-300 mb-4">{project.description}</p>
-								<div className="flex flex-wrap gap-2">
-									{project.tech.map((tech) => (
+								</div>
+								<p className="text-zinc-500 text-sm leading-relaxed mb-4">
+									{project.description}
+								</p>
+								<div className="flex flex-wrap gap-1.5">
+									{project.tech.map((t) => (
 										<span
-											key={tech}
-											className="px-3 py-1 bg-gray-700/50 rounded-full text-sm text-blue-400"
+											key={t}
+											className={tagClass(
+												t,
+												"px-2 py-0.5 text-xs rounded border",
+											)}
 										>
-											{tech}
+											{t}
 										</span>
 									))}
 								</div>
-							</div>
+							</a>
 						))}
 					</div>
 				</div>
 			</section>
 
-			{/* Contact Section */}
-			<section id="contact" className="py-20 px-6 relative">
-				<div className="max-w-4xl mx-auto text-center">
-					<h2 className="text-4xl font-bold mb-8 bg-gradient-to-r from-blue-400 to-yellow-400 text-transparent bg-clip-text">
-						Let's Build Something Amazing
+			{/* Divider */}
+			<div className="max-w-5xl mx-auto px-6">
+				<div className="border-t border-zinc-800" />
+			</div>
+
+			{/* Contact */}
+			<section id="contact" className="py-24 px-6">
+				<div className="max-w-5xl mx-auto">
+					<p className="text-blue-500 text-xs font-medium tracking-widest uppercase mb-4">
+						Contact
+					</p>
+					<h2 className="text-3xl font-semibold text-zinc-100 mb-4">
+						Let's work together
 					</h2>
-					<p className="text-xl text-gray-300 mb-12">
+					<p className="text-zinc-500 mb-8 max-w-md">
 						Open to new opportunities, collaborations, and interesting projects.
 					</p>
 					<a
 						href="mailto:portfolio.chief702@passmail.net"
-						className="inline-block px-8 py-4 bg-gradient-to-r from-blue-500 to-yellow-400 rounded-full font-semibold text-lg hover:shadow-lg hover:shadow-blue-500/50 transition-all duration-300 hover:scale-105"
+						className="inline-flex items-center gap-2 px-5 py-3 rounded-md bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium transition-colors duration-200"
 					>
-						Get In Touch
+						<Mail size={16} />
+						Get in touch
 					</a>
 				</div>
 			</section>
 
 			{/* Footer */}
-			<footer className="py-8 px-6 border-t border-gray-800/50 backdrop-blur-sm bg-gray-900/60">
-				<div className="max-w-6xl mx-auto text-center text-gray-400">
-					<p>© 2025 All rights reserved. Built with React & Tailwind CSS</p>
+			<footer className="border-t border-zinc-800/60 py-8 px-6">
+				<div className="max-w-5xl mx-auto flex justify-between items-center text-zinc-600 text-xs">
+					<span>© 2026 Cameron</span>
+					<span>Built with React & Tailwind</span>
 				</div>
 			</footer>
 		</div>
