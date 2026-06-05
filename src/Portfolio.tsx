@@ -114,6 +114,7 @@ export default function Portfolio() {
 		return () => clearTimeout(t);
 	}, []);
 
+export default function Portfolio() {
 	return (
 		<div className="w-full text-teal-50">
 			{/* Hero */}
@@ -193,10 +194,12 @@ export default function Portfolio() {
 							</h3>
 							<p className="text-gray-300 leading-relaxed">
 								Full-time pilot and flight instructor holding an Airline
-								Transport Pilot License (ATPL), E170/E175 type ratings, and all
+								Transport Pilot License, E170/E175 type ratings, and all
 								instructor ratings (CFI, CFII, MEI). Holds a BS in Computer
-								Science and is currently pursuing an MS in Computer Science
-								while building advanced software for the aviation industry.
+								Science from ASU and is currently pursuing an MS while building
+								advanced software for the aviation industry. Passionate about
+								creating fast and safe software that pushes the limits of
+								aviation training using Rust and C++.
 							</p>
 						</div>
 						<div
@@ -297,18 +300,21 @@ export default function Portfolio() {
 										size={16}
 										className="text-gray-400 group-hover:text-teal-400 transition-colors"
 									/>
-								</h3>
-								<p className="text-gray-300 mb-4">{project.description}</p>
-								<div className="flex flex-wrap gap-2">
-									{project.tech.map((tech) => (
+								</div>
+								<p className="text-zinc-500 text-sm leading-relaxed mb-4">
+									{project.description}
+								</p>
+								<div className="flex flex-wrap gap-1.5">
+									{project.tech.map((t) => (
 										<span
 											key={tech}
 											className="px-3 py-1 bg-teal-900/40 border border-teal-700/50 rounded-full text-sm text-teal-300"
 										>
-											{tech}
+											{t}
 										</span>
 									))}
 								</div>
+							</a>
 							</a>
 						))}
 					</div>
@@ -326,3 +332,4 @@ export default function Portfolio() {
 		</div>
 	);
 }
+
