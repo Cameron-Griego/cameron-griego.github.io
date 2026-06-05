@@ -114,7 +114,6 @@ export default function Portfolio() {
 		return () => clearTimeout(t);
 	}, []);
 
-export default function Portfolio() {
 	return (
 		<div className="w-full text-teal-50">
 			{/* Hero */}
@@ -300,21 +299,20 @@ export default function Portfolio() {
 										size={16}
 										className="text-gray-400 group-hover:text-teal-400 transition-colors"
 									/>
-								</div>
-								<p className="text-zinc-500 text-sm leading-relaxed mb-4">
+								</h3>
+								<p className="text-gray-300 mb-4">
 									{project.description}
 								</p>
 								<div className="flex flex-wrap gap-1.5">
 									{project.tech.map((t) => (
 										<span
-											key={tech}
+											key={t}
 											className="px-3 py-1 bg-teal-900/40 border border-teal-700/50 rounded-full text-sm text-teal-300"
 										>
 											{t}
 										</span>
 									))}
 								</div>
-							</a>
 							</a>
 						))}
 					</div>
