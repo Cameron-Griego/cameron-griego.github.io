@@ -1,0 +1,23 @@
+#root {
+	width: 100vw;
+	height: 100vh;
+}
+
+/* Hide the system cursor on desktop where the custom cursor takes over */
+@media screen and (min-width: 768px) {
+	html,
+	body,
+	a,
+	.clickable {
+		cursor: none;
+	}
+}
+
+.clickable {
+	position: relative;
+	cursor: pointer;
+}
+
+* {
+	scroll-behavior: smooth;
+}

@@ -1,1 +1,136 @@
 @import "tailwindcss";
+
+/* Class-based dark mode so the old site's dark:* utilities are always active */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+	/* TextHover reveal gradient reads this raw var */
+	--color-teal-700: #0f766e;
+}
+
+:root {
+	/* TextHover gradient stops reference var(--teal-700) directly */
+	--teal-700: #0f766e;
+	--cursor-color: #2dd4bf;
+}
+
+html {
+	background-color: #101825;
+	color: #e0f2f1;
+}
+
+/* backdrop-filter on Chromium/Windows leaves smear/streak artifacts as the
+ * compositor moves over an element until it repaints (hover forces a repaint,
+ * which is why hovering clears it). Promoting each blurred card to its own
+ * GPU layer keeps it repainting cleanly. */
+[class*="backdrop-blur"] {
+	transform: translateZ(0);
+	backface-visibility: hidden;
+}
+
+body {
+	margin: 0;
+	background: linear-gradient(135deg, #101825 0%, #134e4a 60%, #0d9488 100%);
+	background-attachment: fixed;
+	min-height: 100vh;
+}
+
+/* Custom text selection — teal wash instead of the browser default blue */
+::selection {
+	background: rgba(45, 212, 191, 0.3);
+	color: #f0fdfa;
+	text-shadow: none;
+}
+::-moz-selection {
+	background: rgba(45, 212, 191, 0.3);
+	color: #f0fdfa;
+	text-shadow: none;
+}
+
+a {
+	color: #2dd4bf;
+	transition: color 0.2s;
+}
+
+a:hover {
+	color: #5eead4;
+}
+
+/* Dotted background grid used by HeroHighlight */
+.bg-dot-thick-neutral-300 {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='16' height='16' fill='none'%3E%3Ccircle fill='%23d4d4d4' cx='10' cy='10' r='2.5'/%3E%3C/svg%3E");
+}
+
+.dark\:bg-dot-thick-neutral-800:where(.dark, .dark *),
+.bg-dot-thick-neutral-800 {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='16' height='16' fill='none'%3E%3Ccircle fill='%23262626' cx='10' cy='10' r='2.5'/%3E%3C/svg%3E");
+}
+
+.bg-dot-thick-teal-700,
+.dark\:bg-dot-thick-teal-700:where(.dark, .dark *) {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='16' height='16' fill='none'%3E%3Ccircle fill='%230f766e' cx='10' cy='10' r='2.5'/%3E%3C/svg%3E");
+}
+
+/* Fractal-noise dither overlay (ported from the Infinity website) — breaks up
+ * gradient banding on 8-bit displays with two layered noise textures. */
+.gradient-dither {
+	position: relative;
+	isolation: isolate;
+}
+
+.gradient-dither::before,
+.gradient-dither::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	z-index: 5;
+	background-repeat: repeat;
+}
+
+.gradient-dither::before {
+	background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='128'%20height='128'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.35'%20numOctaves='2'%20stitchTiles='stitch'/%3E%3C/filter%3E%3Crect%20width='128'%20height='128'%20filter='url(%23n)'/%3E%3C/svg%3E");
+	background-size: 520px 520px;
+	mix-blend-mode: soft-light;
+	opacity: 0.07;
+}
+
+.gradient-dither::after {
+	background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='128'%20height='128'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.9'%20numOctaves='3'%20stitchTiles='stitch'/%3E%3C/filter%3E%3Crect%20width='128'%20height='128'%20filter='url(%23n)'/%3E%3C/svg%3E");
+	background-size: 160px 160px;
+	mix-blend-mode: overlay;
+	opacity: 0.255;
+}
+
+/* Intro fade for the hero copy */
+.text-appear {
+	opacity: 1;
+	transition: all ease-in-out 1s;
+}
+
+.hide-description {
+	opacity: 0;
+	transition: all ease-in-out 1s;
+}
+
+/* Hidden scrollbars on the scrollable pages */
+.scrollless::-webkit-scrollbar {
+	display: none;
+}
+
+.scrollless {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+/* The animated SVG headline fills its bounded wrapper height */
+.home-text {
+	height: 100%;
+	width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+	* {
+		cursor: default;
+	}
+}
