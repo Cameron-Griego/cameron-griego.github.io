@@ -1,333 +1,469 @@
-import { useEffect, useState } from "react";
-import {
-	FaGithub,
-	FaEnvelope,
-	FaBriefcase,
-	FaRocket,
-	FaGraduationCap,
-	FaExternalLinkAlt,
-} from "react-icons/fa";
-import { TextHoverEffect } from "@/components/textHover/TextHover";
-import { CodeBlock, type Lang } from "@/components/codeBlock/CodeBlock";
-import usePageSize from "@/hooks/UsePageSize";
+import { useEffect, useRef, type ReactNode } from "react";
 
-const skills: { file: string; lang: Lang; code: string }[] = [
+const GITHUB = "https://github.com/CameronGr";
+const EMAIL = "portfolio.chief702@passmail.net";
+
+const facts: { label: string; values: string[] }[] = [
 	{
-		file: "skills.rs",
-		lang: "rust",
-		code: [
-			"fn cameron() {",
-			'    let experience_level = "Expert";',
-			'    let uses: [&str; 3] = ["systems", "WASM", "tooling"];',
-			'    println!("{experience_level} - {}", uses.join(", "));',
-			"}",
-		].join("\n"),
+		label: "education",
+		values: [
+			"BS Computer Science — Arizona State University",
+			"MS Computer Science — in progress",
+		],
 	},
+
 	{
-		file: "skills.cpp",
-		lang: "cpp",
-		code: [
-			"void cameron() {",
-			'    auto experience_level = "Expert";',
-			'    std::vector<std::string> uses = {"engines", "avionics", "WASM"};',
-			'    std::cout << experience_level << " - " << join(uses, ", ");',
-			"}",
-		].join("\n"),
-	},
-	{
-		file: "Skills.cs",
-		lang: "cs",
-		code: [
-			"void Cameron() {",
-			'    var experience_level = "Advanced";',
-			'    var uses = ["desktop", "tooling", ".NET"];',
-			'    Console.WriteLine($"{experience_level} - {string.Join(", ", uses)}");',
-			"}",
-		].join("\n"),
-	},
-	{
-		file: "skills.ts",
-		lang: "ts",
-		code: [
-			"function cameron(): void {",
-			'    const experience_level = "Advanced";',
-			'    const uses = ["web", "React", "Tauri"];',
-			'    console.log(`${experience_level} - ${uses.join(", ")}`);',
-			"}",
-		].join("\n"),
+		label: "focus",
+		values: [
+			"Systems programming",
+			"Simulation & avionics",
+			"Developer tooling",
+			"Code quality & maintainability",
+		],
 	},
 ];
 
-const experiences = [
+const projects: {
+	name: string;
+	year: string;
+	description: string;
+	tech: string[];
+	link: string;
+	flagship?: boolean;
+}[] = [
 	{
-		title: "Software Engineer",
-		company: "Aero Dynamics Development",
-		period: "2025 - Present",
+		name: "aero dynamics dc-10",
+		year: "2026",
 		description:
-			"Building intricate embedded systems, tooling, and simulations.",
+			"Full-depth DC-10 systems and flight model — written entirely in Rust, compiled to WASM. No C++ anywhere in the aircraft. The most complete simulation of a DC-10 in any flight simulator ever.",
+		tech: ["Rust", "WASM", "SQL"],
+		link: "https://www.infinity-simulations.com/#/aircraft",
+		flagship: true,
 	},
 	{
-		title: "Founder & CEO",
-		company: "Infinity Simulations",
-		period: "2025 - Present",
+		name: "kivro",
+		year: "2026",
 		description:
-			"Building tooling and simulation software for the aviation industry.",
+			"Secrets manager that keeps credentials in the OS keyring and injects them into a process on demand — a drop-in replacement for .env files. A committed manifest declares what a project needs; sharing happens through age-encrypted bundles instead of pasted plaintext.",
+		tech: ["Rust", "age", "CLI", "Keyring"],
+		link: "https://kivro.xyz/",
 	},
-];
-
-const projects = [
 	{
-		title: "Infinity Ecosystem",
+		name: "infinity ecosystem",
+		year: "2025",
 		description:
-			"Comprehensive suite for creating and distributing paid flight simulation content efficiently and securely.",
+			"Suite for creating and distributing paid flight simulation content efficiently and securely — the platform the rest of the work ships on.",
 		tech: ["Rust", "C++", "WASM", "AWS", "PostgreSQL", "React"],
 		link: "https://www.infinity-simulations.com/#/about",
+		flagship: true,
 	},
 	{
-		title: "Aero Dynamics T-38 Aircraft",
+		name: "aero dynamics t-38",
+		year: "2025",
 		description:
 			"High fidelity T-38 simulation model with realistic flight dynamics and systems.",
-		tech: ["C++", "Rust", "PostgreSQL", "WASM"],
+		tech: ["C++", "Rust", "WASM", "PostgreSQL"],
 		link: "https://www.infinity-simulations.com/#/aircraft",
 	},
 	{
-		title: "CrosshairZ",
+		name: "crosshairz",
+		year: "2024",
 		description:
-			"Crosshair overlay program that runs inside the Xbox Game Bar, Supports custom drawn crosshairs, community uploads, animations, and more.",
+			"Crosshair overlay that runs inside the Xbox Game Bar. Custom drawn crosshairs, community uploads, and animation support.",
 		tech: ["Rust", "C#"],
 		link: "https://github.com/CameronGr/CrosshairZ",
 	},
 ];
 
-// Faint translucent fill so the blurred background shows through the cards
-// (glass) instead of each card carrying its own teal gradient.
-const cardBg = {
-	background: "rgba(255, 255, 255, 0.04)",
-};
+const experience: {
+	role: string;
+	company: string;
+	period: string;
+	description: string;
+}[] = [
+	{
+		role: "Software Engineer",
+		company: "Aero Dynamics Development",
+		period: "2025 — present",
+		description:
+			"Building intricate embedded systems, tooling, and simulations.",
+	},
+	{
+		role: "Founder & CEO",
+		company: "Infinity Simulations",
+		period: "2025 — present",
+		description:
+			"Building tooling and simulation software for the aviation industry.",
+	},
+];
 
-export default function Portfolio() {
-	const size = usePageSize();
-	const [intro, setIntro] = useState("hide-description");
+const stack: {
+	group: string;
+	items: { name: string; level?: string; areas?: string; daily?: boolean }[];
+}[] = [
+	{
+		group: "languages",
+		items: [
+			{
+				name: "rust",
+				level: "expert",
+				areas: "systems, wasm, tooling",
+				daily: true,
+			},
+			{
+				name: "c++",
+				level: "expert",
+				areas: "engines, avionics, wasm",
+				daily: true,
+			},
+			{ name: "c#", level: "advanced", areas: "desktop, tooling, .net" },
+			{ name: "typescript", level: "advanced", areas: "web, react, tauri" },
+		],
+	},
+	{
+		group: "domains",
+		items: [
+			{ name: "embedded systems" },
+			{ name: "flight simulation" },
+			{ name: "avionics" },
+			{ name: "developer tooling" },
+		],
+	},
+	{
+		group: "infra",
+		items: [{ name: "aws" }, { name: "postgresql" }, { name: "wasm" }],
+	},
+];
+
+const nav = [
+	{ id: "about", label: "about" },
+	{ id: "work", label: "work" },
+	{ id: "experience", label: "experience" },
+	{ id: "stack", label: "stack" },
+	{ id: "contact", label: "contact" },
+];
+
+function useReveal<T extends HTMLElement>() {
+	const ref = useRef<T>(null);
 
 	useEffect(() => {
-		const t = setTimeout(() => setIntro("text-appear"), 1000);
-		return () => clearTimeout(t);
+		const root = ref.current;
+		if (!root) return;
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (!entry.isIntersecting) continue;
+					entry.target.classList.add("in");
+					observer.unobserve(entry.target);
+				}
+			},
+			{ rootMargin: "0px 0px -8% 0px", threshold: 0.05 },
+		);
+
+		root.querySelectorAll<HTMLElement>(".reveal").forEach((el) => {
+			observer.observe(el);
+		});
+		return () => observer.disconnect();
 	}, []);
 
+	return ref;
+}
+
+function Section({
+	id,
+	index,
+	title,
+	children,
+}: {
+	id: string;
+	index: string;
+	title: string;
+	children: ReactNode;
+}) {
 	return (
-		<div className="w-full text-teal-50">
-			{/* Hero */}
-			<section
-				id="hero"
-				className="min-h-screen flex flex-col items-center justify-center relative px-6"
-			>
-				<div className="w-full max-w-5xl aspect-[3/1] flex items-center justify-center">
-					{size.width > 768 ? (
-						<TextHoverEffect wrap={false} text="Cameron" />
-					) : (
-						<TextHoverEffect wrap text="Cameron" />
-					)}
-				</div>
+		<section id={id} className="reveal border-t border-line py-20">
+			<h2 className="mb-10 flex items-center gap-4 text-xs tracking-[0.25em] text-muted uppercase">
+				<span className="text-accent">{index}</span>
+				<span>{title}</span>
+				<span className="h-px flex-1 bg-line" />
+			</h2>
+			{children}
+		</section>
+	);
+}
 
-				<h2
-					className={`text-2xl md:text-3xl font-bold text-center mt-2 mb-6 ${intro}`}
-				>
-					<span className="text-teal-400">Software Engineer</span>{" "}
-					<span className="text-gray-300">& Full-Time Pilot</span>
-				</h2>
+function StackTree() {
+	return (
+		<div className="-mx-6 overflow-x-auto px-6">
+			<div className="min-w-max text-xs leading-[1.45] whitespace-pre sm:text-sm">
+				<p className="mb-3 text-dim">
+					<span className="text-accent">$</span> tree ~/stack
+				</p>
+				{stack.map((group, g) => {
+					const lastGroup = g === stack.length - 1;
+					const label = (item: (typeof group.items)[number]) =>
+						item.name + (item.daily ? "*" : "");
+					const width =
+						Math.max(...group.items.map((i) => label(i).length)) + 3;
 
-				<div className={`flex gap-4 justify-center mb-10 ${intro}`}>
-					<a
-						href="https://github.com/CameronGr"
-						rel="noopener noreferrer"
-						target="_blank"
-						className="clickable p-3 rounded-full border border-teal-500/40 bg-teal-900/20 hover:bg-teal-500/20 hover:border-teal-400 transition-all duration-300 hover:scale-110"
-						style={cardBg}
-					>
-						<FaGithub size={22} className="text-teal-300" />
-					</a>
-					<a
-						href="mailto:portfolio.chief702@passmail.net"
-						className="clickable p-3 rounded-full border border-teal-500/40 bg-teal-900/20 hover:bg-teal-500/20 hover:border-teal-400 transition-all duration-300 hover:scale-110"
-						style={cardBg}
-					>
-						<FaEnvelope size={22} className="text-teal-300" />
-					</a>
-				</div>
-
-				<div
-					className={`flex flex-wrap gap-x-6 gap-y-3 justify-center text-sm max-w-3xl text-center ${intro}`}
-				>
-					<div className="flex items-center gap-2">
-						<FaGraduationCap className="text-teal-400" size={18} />
-						<span>BS Computer Science</span>
-					</div>
-					<div className="flex items-center gap-2">
-						<FaGraduationCap className="text-emerald-400" size={18} />
-						<span>MS Computer Science (in progress)</span>
-					</div>
-					<div className="flex items-center gap-2">
-						<FaBriefcase className="text-emerald-400" size={18} />
-						<span>
-							Airline Transport Pilot License, CFI/CFII/MEI, E170/E175 Type
-							Ratings
-						</span>
-					</div>
-				</div>
-			</section>
-
-			{/* About */}
-			<section id="about" className="py-20 px-6 relative">
-				<div className="max-w-6xl mx-auto">
-					<h2 className="text-4xl font-bold mb-12 text-center bg-gradient-to-r from-teal-400 to-emerald-400 text-transparent bg-clip-text">
-						About Me
-					</h2>
-					<div className="grid md:grid-cols-2 gap-8">
-						<div
-							className="rounded-2xl p-8 border border-teal-500/40 backdrop-blur-md hover:border-teal-400 transition-all duration-300"
-							style={cardBg}
-						>
-							<h3 className="text-2xl font-bold mb-4 flex items-center gap-3">
-								<FaBriefcase className="text-teal-400" />
-								Professional
-							</h3>
-							<p className="text-gray-300 leading-relaxed">
-								Full-time pilot and flight instructor holding an Airline
-								Transport Pilot License, E170/E175 type ratings, and all
-								instructor ratings (CFI, CFII, MEI). Holds a BS in Computer
-								Science from ASU and is currently pursuing an MS while building
-								advanced software for the aviation industry. Passionate about
-								creating fast and safe software that pushes the limits of
-								aviation training using Rust and C++.
+					return (
+						<div key={group.group}>
+							<p>
+								<span className="text-line-2">
+									{lastGroup ? "└── " : "├── "}
+								</span>
+								<span className="text-muted">{group.group}/</span>
 							</p>
-						</div>
-						<div
-							className="rounded-2xl p-8 border border-teal-500/40 backdrop-blur-md hover:border-emerald-400 transition-all duration-300"
-							style={cardBg}
-						>
-							<h3 className="text-2xl font-bold mb-4 flex items-center gap-3">
-								<FaRocket className="text-emerald-400" />
-								Technical
-							</h3>
-							<p className="text-gray-300 leading-relaxed">
-								Experienced software engineer with a passion for aviation
-								technology. Skilled in low-level programming, simulation, and
-								building tools that empower pilots and aviation professionals.
-							</p>
-						</div>
-					</div>
-
-					{/* Skills */}
-					<div className="mt-16">
-						<h3 className="text-3xl font-bold mb-8 text-center text-emerald-400">
-							Technical Skills
-						</h3>
-						<div className="grid sm:grid-cols-2 gap-6">
-							{skills.map((skill) => (
-								<div
-									key={skill.file}
-									className="group rounded-xl border border-teal-500/30 backdrop-blur-md overflow-hidden transition-all duration-300 hover:border-teal-400 hover:scale-[1.02] hover:shadow-xl hover:shadow-teal-500/10"
-									style={cardBg}
-								>
-									{/* editor chrome */}
-									<div className="flex items-center gap-2 px-4 py-2.5 bg-black/40 border-b border-teal-800/40">
-										<span className="w-3 h-3 rounded-full bg-red-400/70" />
-										<span className="w-3 h-3 rounded-full bg-yellow-400/70" />
-										<span className="w-3 h-3 rounded-full bg-green-400/70" />
-										<span className="ml-2 text-xs text-teal-400/70 font-mono">
-											{skill.file}
-										</span>
-									</div>
-									<CodeBlock code={skill.code} lang={skill.lang} />
-								</div>
+							{group.items.map((item, i) => (
+								<p key={item.name}>
+									<span className="text-line-2">
+										{(lastGroup ? "    " : "│   ") +
+											(i === group.items.length - 1 ? "└── " : "├── ")}
+									</span>
+									<span className={item.daily ? "text-accent" : "text-fg"}>
+										{item.areas ? label(item).padEnd(width) : label(item)}
+									</span>
+									{item.level && (
+										<span className="text-dim">{item.level.padEnd(11)}</span>
+									)}
+									{item.areas && (
+										<span className="text-muted">{item.areas}</span>
+									)}
+								</p>
 							))}
 						</div>
-					</div>
-				</div>
-			</section>
-
-			{/* Experience */}
-			<section id="experience" className="py-20 px-6 relative">
-				<div className="max-w-6xl mx-auto">
-					<h2 className="text-4xl font-bold mb-12 text-center bg-gradient-to-r from-teal-400 to-emerald-400 text-transparent bg-clip-text">
-						Experience
-					</h2>
-					<div className="space-y-6">
-						{experiences.map((exp) => (
-							<div
-								key={exp.title + exp.company}
-								className="rounded-2xl p-8 border border-teal-500/40 backdrop-blur-md hover:border-teal-400 transition-all duration-300 hover:scale-[1.02]"
-								style={cardBg}
-							>
-								<div className="flex flex-wrap justify-between items-start gap-3 mb-4">
-									<div>
-										<h3 className="text-2xl font-bold text-teal-400">
-											{exp.title}
-										</h3>
-										<p className="text-xl text-gray-300">{exp.company}</p>
-									</div>
-									<span className="text-teal-200 bg-teal-900/40 border border-teal-700/50 px-4 py-2 rounded-full text-sm">
-										{exp.period}
-									</span>
-								</div>
-								<p className="text-gray-300">{exp.description}</p>
-							</div>
-						))}
-					</div>
-				</div>
-			</section>
-
-			{/* Projects */}
-			<section id="projects" className="py-20 px-6 relative">
-				<div className="max-w-6xl mx-auto">
-					<h2 className="text-4xl font-bold mb-12 text-center bg-gradient-to-r from-teal-400 to-emerald-400 text-transparent bg-clip-text">
-						Featured Projects
-					</h2>
-					<div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-						{projects.map((project) => (
-							<a
-								key={project.title}
-								href={project.link}
-								target={project.link === "#" ? undefined : "_blank"}
-								rel="noopener noreferrer"
-								className="clickable group rounded-2xl p-6 border border-teal-500/40 backdrop-blur-md hover:border-emerald-400 transition-all duration-300 hover:scale-[1.02] block"
-								style={cardBg}
-							>
-								<h3 className="text-xl font-bold mb-3 flex items-center justify-between text-teal-300">
-									{project.title}
-									<FaExternalLinkAlt
-										size={16}
-										className="text-gray-400 group-hover:text-teal-400 transition-colors"
-									/>
-								</h3>
-								<p className="text-gray-300 mb-4">
-									{project.description}
-								</p>
-								<div className="flex flex-wrap gap-1.5">
-									{project.tech.map((t) => (
-										<span
-											key={t}
-											className="px-3 py-1 bg-teal-900/40 border border-teal-700/50 rounded-full text-sm text-teal-300"
-										>
-											{t}
-										</span>
-									))}
-								</div>
-							</a>
-						))}
-					</div>
-				</div>
-			</section>
-
-			<footer className="py-8 px-6 border-t border-teal-800/50 backdrop-blur-sm">
-				<div className="max-w-6xl mx-auto text-center text-gray-400">
-					<p>© 2025 All rights reserved. Built with React & Tailwind CSS</p>
-				</div>
-			</footer>
-
-			{/* bottom padding so content clears the floating dock */}
-			<div className="h-24" />
+					);
+				})}
+				<p className="mt-3 text-xs text-dim">
+					<span className="text-line-2"># </span>
+					<span className="text-accent">*</span> daily driver
+				</p>
+			</div>
 		</div>
 	);
 }
 
+function Tech({ items }: { items: string[] }) {
+	return (
+		<p className="mt-3 text-xs text-dim">
+			{items.map((t, i) => (
+				<span key={t}>
+					{i > 0 && <span className="px-2 text-line-2">·</span>}
+					{t.toLowerCase()}
+				</span>
+			))}
+		</p>
+	);
+}
+
+export default function Portfolio() {
+	const ref = useReveal<HTMLDivElement>();
+
+	return (
+		<div ref={ref} className="scanlines relative">
+			<header className="sticky top-0 z-20 border-b border-line bg-ink/95">
+				<div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-6">
+					<a
+						href="#top"
+						className="text-sm text-fg transition-colors hover:text-accent"
+					>
+						<span className="text-accent">~</span>/cameron
+					</a>
+					<nav className="hidden gap-6 text-xs text-muted sm:flex">
+						{nav.map((item) => (
+							<a
+								key={item.id}
+								href={`#${item.id}`}
+								className="transition-colors hover:text-accent"
+							>
+								{item.label}
+							</a>
+						))}
+					</nav>
+				</div>
+			</header>
+
+			<main className="mx-auto max-w-3xl px-6">
+				{/* Hero */}
+				<section
+					id="top"
+					className="flex min-h-[78vh] flex-col justify-center py-24"
+				>
+					<p className="mb-6 text-xs tracking-[0.25em] text-dim uppercase">
+						portfolio / 2026
+					</p>
+					<h1 className="text-4xl font-medium tracking-tight text-fg sm:text-6xl">
+						Cameron
+						<span className="caret ml-1 text-accent">▌</span>
+					</h1>
+					<p className="mt-4 text-sm text-muted sm:text-base">
+						software engineer
+						<span className="px-2 text-line-2">·</span>
+						pilot & flight instructor
+					</p>
+					<p className="mt-8 max-w-xl leading-relaxed text-muted">
+						I build systems software — simulation, avionics, and developer
+						tooling — mostly in Rust and C++. Full-time pilot and flight
+						instructor writing software that progresses the industry.
+					</p>
+					<div className="mt-10 flex gap-6 text-sm">
+						<a
+							href={GITHUB}
+							target="_blank"
+							rel="noopener noreferrer"
+							className="text-accent transition-colors hover:text-fg"
+						>
+							[github]
+						</a>
+						<a
+							href={`mailto:${EMAIL}`}
+							className="text-accent transition-colors hover:text-fg"
+						>
+							[email]
+						</a>
+					</div>
+				</section>
+
+				{/* About */}
+				<Section id="about" index="01" title="about">
+					<dl className="space-y-6">
+						{facts.map((fact) => (
+							<div
+								key={fact.label}
+								className="grid gap-1 sm:grid-cols-[7rem_1fr] sm:gap-6"
+							>
+								<dt className="text-xs tracking-widest text-dim uppercase sm:pt-1">
+									{fact.label}
+								</dt>
+								<dd className="space-y-1">
+									{fact.values.map((value) => (
+										<p key={value} className="text-fg">
+											{value}
+										</p>
+									))}
+								</dd>
+							</div>
+						))}
+					</dl>
+				</Section>
+
+				{/* Work */}
+				<Section id="work" index="02" title="work">
+					<ul>
+						{projects.map((project, i) => (
+							<li key={project.name}>
+								<a
+									href={project.link}
+									target="_blank"
+									rel="noopener noreferrer"
+									className={`group block py-8 ${
+										i > 0 ? "border-t border-line" : "pt-0"
+									}`}
+								>
+									<div className="flex items-baseline justify-between gap-4">
+										<h3 className="text-lg text-fg transition-colors group-hover:text-accent">
+											{project.name}
+											<span className="ml-2 inline-block text-sm text-dim transition-all group-hover:translate-x-1 group-hover:text-accent">
+												↗
+											</span>
+										</h3>
+										<span className="shrink-0 text-xs text-dim">
+											{project.flagship && (
+												<>
+													<span className="tracking-widest text-accent uppercase">
+														flagship
+													</span>
+													<span className="px-2 text-line-2">·</span>
+												</>
+											)}
+											{project.year}
+										</span>
+									</div>
+									<p className="mt-2 max-w-2xl leading-relaxed text-muted">
+										{project.description}
+									</p>
+									<Tech items={project.tech} />
+								</a>
+							</li>
+						))}
+					</ul>
+					<p className="mt-8 border-t border-line pt-6 text-xs text-dim">
+						<span className="text-line-2"># </span>
+						<span className="tracking-widest text-accent uppercase">
+							flagship
+						</span>{" "}
+						— my most significant work, projects that best represent my skills
+						and interests.
+					</p>
+				</Section>
+
+				{/* Experience */}
+				<Section id="experience" index="03" title="experience">
+					<ul>
+						{experience.map((job, i) => (
+							<li
+								key={job.role + job.company}
+								className={i > 0 ? "mt-8 border-t border-line pt-8" : ""}
+							>
+								<div className="flex items-baseline justify-between gap-4">
+									<h3 className="text-lg text-fg">{job.role}</h3>
+									<span className="shrink-0 text-xs text-dim">
+										{job.period}
+									</span>
+								</div>
+								<p className="mt-1 text-sm text-accent">{job.company}</p>
+								<p className="mt-2 leading-relaxed text-muted">
+									{job.description}
+								</p>
+							</li>
+						))}
+					</ul>
+				</Section>
+
+				{/* Stack */}
+				<Section id="stack" index="04" title="stack">
+					<StackTree />
+				</Section>
+
+				{/* Contact */}
+				<Section id="contact" index="05" title="contact">
+					<ul className="space-y-3">
+						<li className="grid gap-1 sm:grid-cols-[7rem_1fr] sm:gap-6">
+							<span className="text-xs tracking-widest text-dim uppercase sm:pt-1">
+								email
+							</span>
+							<a
+								href={`mailto:${EMAIL}`}
+								className="text-fg transition-colors hover:text-accent"
+							>
+								{EMAIL}
+							</a>
+						</li>
+						<li className="grid gap-1 sm:grid-cols-[7rem_1fr] sm:gap-6">
+							<span className="text-xs tracking-widest text-dim uppercase sm:pt-1">
+								github
+							</span>
+							<a
+								href={GITHUB}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="text-fg transition-colors hover:text-accent"
+							>
+								github.com/CameronGr
+							</a>
+						</li>
+					</ul>
+				</Section>
+
+				<footer className="border-t border-line py-10 text-xs text-dim">
+					<p>
+						© 2026 cameron
+						<span className="px-2 text-line-2">·</span>
+						react + tailwind
+					</p>
+				</footer>
+			</main>
+		</div>
+	);
+}
