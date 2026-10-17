@@ -6,10 +6,7 @@ const EMAIL = "portfolio.chief702@passmail.net";
 const facts: { label: string; values: string[] }[] = [
 	{
 		label: "education",
-		values: [
-			"BS Computer Science — Arizona State University",
-			"MS Computer Science — in progress",
-		],
+		values: ["MS Computer Science — Arizona State University"],
 	},
 
 	{
